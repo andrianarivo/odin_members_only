@@ -6,6 +6,7 @@ const logger = require('morgan');
 const mongoose = require('mongoose');
 const nconf = require('nconf');
 const debug = require('debug')('app');
+const expressLayouts = require('express-ejs-layouts');
 
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
@@ -22,6 +23,7 @@ main().catch((err) => debug(err));
 const app = express();
 
 // view engine setup
+app.use(expressLayouts);
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
