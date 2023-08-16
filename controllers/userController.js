@@ -12,7 +12,6 @@ exports.sign_up_get = asyncHandler((req, res) => {
 exports.sign_up_post = [
   body('first_name', 'Firstname must not be empty').trim().isLength({ min: 1 }).escape(),
   body('last_name', 'Lastname must not be empty').trim().isLength({ min: 1 }).escape(),
-  body('created_at', 'Date is not valid').escape(),
   body('membership_status', 'Membership should be one of the following: member, outsider, admin')
     .trim()
     .matches('member|outsider|admin')
@@ -37,7 +36,6 @@ exports.sign_up_post = [
       first_name: req.body.first_name,
       last_name: req.body.last_name,
       email: req.body.email,
-      created_at: new Date(req.body.created_at),
       membership_status: req.body.membership_status,
     });
 
