@@ -1,0 +1,24 @@
+<div class="container-fluid d-flex justify-content-center align-items-center flex-column">
+    <h2 class="fs-1 mb-3"><%= locals.title %></h2>
+    <% if (locals.errors) { %>
+        <p>Fix these errors before continue:</p>
+        <ul class="list-group">
+            <% locals.errors.forEach((error) => { %>
+                <li class="list-group-item list-group-item-warning"><%= error.msg %></li>
+            <% }) %>
+        </ul>
+    <% } %>
+    <form class="w-50" method="post" action="">
+        <div class="mb-3">
+            <label for="title" class="form-label">Title:</label>
+            <input type="text" name="title" class="form-control" id="title"
+                   value="<%= locals.message ? locals.message.title : '' %>">
+        </div>
+        <div class="mb-3">
+            <label for="message" class="form-label">Message:</label>
+            <textarea id="message" class="form-control"
+                      name="message"><%= locals.message ? locals.message.text : '' %></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+</div>
