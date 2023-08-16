@@ -29,7 +29,10 @@
             <label for="confirm_password" class="form-label">Confirm Password:</label>
             <input type="password" name="confirm_password" class="form-control" id="confirm_password">
         </div>
-        <input type="hidden" name="membership_status" value="outsider"/>
+        <div class="mb-3">
+            <input type="checkbox" class="form-check-input" name="is_admin" id="is_admin"/>
+            <label for="is_admin" class="form-label"><strong> is admin </strong></label>
+        </div>
         <button type="submit" class="btn btn-primary">Submit</button>
     </form>
 </div>
