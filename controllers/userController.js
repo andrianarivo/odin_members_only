@@ -14,10 +14,7 @@ exports.sign_up_get = asyncHandler((req, res) => {
 exports.sign_up_post = [
   body('first_name', 'Firstname must not be empty').trim().isLength({ min: 1 }).escape(),
   body('last_name', 'Lastname must not be empty').trim().isLength({ min: 1 }).escape(),
-  body('membership_status', 'Membership should be one of the following: member, outsider, admin')
-    .trim()
-    .matches('member|outsider|admin')
-    .escape(),
+  body('is_admin').optional({ values: 'null' }),
   body('email', 'A valid email address is required')
     .trim()
     .isLength({ min: 1 })
@@ -34,11 +31,13 @@ exports.sign_up_post = [
   asyncHandler(async (req, res, next) => {
     const errors = validationResult(req);
 
+    const membershipStatus = (req.body.is_admin) ? 'admin' : 'outsider';
+
     const user = new User({
       first_name: req.body.first_name,
       last_name: req.body.last_name,
       email: req.body.email,
-      membership_status: req.body.membership_status,
+      membership_status: membershipStatus,
     });
 
     if (errors.isEmpty()) {
@@ -48,8 +47,11 @@ exports.sign_up_post = [
         } else {
           user.password_hash = hashedPassword;
           await user.save();
-          // eslint-disable-next-line no-underscore-dangle
-          res.redirect(user.join_club_url);
+          if (membershipStatus === 'admin') {
+            res.redirect('/users/sign_in');
+          } else {
+            res.redirect(user.join_club_url);
+          }
         }
       });
     } else {
