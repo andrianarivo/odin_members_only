@@ -1,6 +1,8 @@
 const asyncHandler = require('express-async-handler');
 const { body, validationResult } = require('express-validator');
 const bcrypt = require('bcryptjs');
+const LocalStrategy = require('passport-local');
+const passport = require('passport');
 const User = require('../models/user');
 
 exports.sign_up_get = asyncHandler((req, res) => {
@@ -12,7 +14,6 @@ exports.sign_up_get = asyncHandler((req, res) => {
 exports.sign_up_post = [
   body('first_name', 'Firstname must not be empty').trim().isLength({ min: 1 }).escape(),
   body('last_name', 'Lastname must not be empty').trim().isLength({ min: 1 }).escape(),
-  body('created_at', 'Date is not valid').escape(),
   body('membership_status', 'Membership should be one of the following: member, outsider, admin')
     .trim()
     .matches('member|outsider|admin')
@@ -22,8 +23,8 @@ exports.sign_up_post = [
     .isLength({ min: 1 })
     .isEmail()
     .escape()
-    .custom((value) => {
-      const existing = User.findOne({ email: value });
+    .custom(async (value) => {
+      const existing = await User.findOne({ email: value });
       if (existing) {
         throw new Error('Email already in use.');
       }
@@ -37,7 +38,6 @@ exports.sign_up_post = [
       first_name: req.body.first_name,
       last_name: req.body.last_name,
       email: req.body.email,
-      created_at: new Date(req.body.created_at),
       membership_status: req.body.membership_status,
     });
 
@@ -87,7 +87,7 @@ exports.join_club_post = [
       }
       user.membership_status = 'member';
       await user.save();
-      res.redirect('/');
+      res.redirect('/users/sign_in');
     } else {
       res.render('join_club', {
         title: 'Join The Club',
@@ -96,3 +96,67 @@ exports.join_club_post = [
     }
   }),
 ];
+
+exports.sign_in_get = asyncHandler((req, res) => {
+  res.render('sign_in', {
+    title: 'Log In',
+  });
+});
+
+const strategyOptions = {
+  passReqToCallback: true,
+  usernameField: 'email',
+  passwordField: 'password',
+};
+
+const verify = async (req, username, password, done) => {
+  const user = await User.findOne({ email: username });
+  req.session.messages = [];
+  if (user) {
+    const matches = await bcrypt.compare(password, user.password_hash);
+    if (matches) {
+      done(null, user);
+    } else {
+      done(null, false, { message: 'Incorrect password' });
+    }
+  } else {
+    done(null, false, { message: 'Incorrect email' });
+  }
+};
+
+const localStrategy = new LocalStrategy(strategyOptions, verify);
+
+passport.use(localStrategy);
+passport.serializeUser((user, done) => {
+  // eslint-disable-next-line no-underscore-dangle
+  done(null, user._id);
+});
+
+passport.deserializeUser(async (id, done) => {
+  try {
+    const user = await User.findById(id);
+    done(null, user);
+  } catch (err) {
+    done(err);
+  }
+});
+
+exports.sign_in_post = [
+  body('email', 'A valid email address is required')
+    .trim()
+    .isLength({ min: 1 })
+    .isEmail()
+    .escape(),
+  body('password', 'Password is required to log in').isLength({ min: 1 }),
+  passport.authenticate('local', { successRedirect: '/', failureRedirect: '/users/sign_in', failureMessage: true }),
+];
+
+exports.log_out = asyncHandler((req, res, next) => {
+  req.logout((err) => {
+    if (err) {
+      next(err);
+    } else {
+      res.redirect('/');
+    }
+  });
+});

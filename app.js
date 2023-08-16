@@ -7,11 +7,13 @@ const mongoose = require('mongoose');
 const nconf = require('nconf');
 const debug = require('debug')('app');
 const expressLayouts = require('express-ejs-layouts');
+const session = require('express-session');
+const passport = require('passport');
 
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
 
-nconf.file({ file: 'config.json' });
+nconf.file({ file: path.join(__dirname, 'config.json') });
 const mongoDB = nconf.get('mongoDB');
 
 async function main() {
@@ -28,10 +30,25 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
 app.use(logger('dev'));
+const secret = nconf.get('session_secret');
+
+app.use(session({
+  secret,
+  resave: false,
+  saveUninitialized: true,
+}));
+app.use(passport.initialize());
+app.use(passport.session());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+
+app.use((req, res, next) => {
+  res.locals.currentUser = req.user;
+  res.locals.errors = req.session.messages;
+  next();
+});
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);

@@ -1,2 +1,7 @@
-<h1><%= locals.title %></h1>
-<p>Welcome to <%= locals.title %></p>
+<div class="container">
+    <h1>Welcome <%= locals.currentUser ? `back ${locals.currentUser.first_name}` : 'anonymous user!' %></h1>
+    <% if (locals.currentUser) { %>
+        <p>Since you're a member, you can create a message!</p>
+        <a class="btn btn-primary" href="/messages/create">Create</a>
+    <% } %>
+</div>
