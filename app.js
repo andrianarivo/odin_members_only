@@ -3,13 +3,27 @@ const createError = require('http-errors');
 const express = require('express');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
+const mongoose = require('mongoose');
+const nconf = require('nconf');
+const debug = require('debug')('app');
+const expressLayouts = require('express-ejs-layouts');
 
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
 
+nconf.file({ file: 'config.json' });
+const mongoDB = nconf.get('mongoDB');
+
+async function main() {
+  await mongoose.connect(mongoDB);
+}
+
+main().catch((err) => debug(err));
+
 const app = express();
 
 // view engine setup
+app.use(expressLayouts);
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
@@ -36,7 +50,7 @@ app.use((err, req, res, next) => {
 
   // render the error page
   res.status(err.status || 500);
-  res.render('error');
+  res.render('error', { title: `${err.status}-${err.message}` });
 });
 
 module.exports = app;
