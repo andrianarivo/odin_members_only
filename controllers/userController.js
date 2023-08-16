@@ -21,8 +21,8 @@ exports.sign_up_post = [
     .isLength({ min: 1 })
     .isEmail()
     .escape()
-    .custom((value) => {
-      const existing = User.findOne({ email: value });
+    .custom(async (value) => {
+      const existing = await User.findOne({ email: value });
       if (existing) {
         throw new Error('Email already in use.');
       }
@@ -85,7 +85,7 @@ exports.join_club_post = [
       }
       user.membership_status = 'member';
       await user.save();
-      res.redirect('/');
+      res.redirect('/users/sign_in');
     } else {
       res.render('join_club', {
         title: 'Join The Club',
