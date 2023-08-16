@@ -63,7 +63,7 @@ exports.sign_up_post = [
 
 exports.join_club_get = asyncHandler((req, res) => {
   res.render('join_club', {
-    title: 'Join Club',
+    title: 'Join The Club',
   });
 });
 
@@ -90,7 +90,7 @@ exports.join_club_post = [
       res.redirect('/');
     } else {
       res.render('join_club', {
-        title: 'Join Club',
+        title: 'Join The Club',
         errors: errors.array(),
       });
     }
