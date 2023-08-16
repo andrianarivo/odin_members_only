@@ -60,3 +60,39 @@ exports.sign_up_post = [
     }
   }),
 ];
+
+exports.join_club_get = asyncHandler((req, res) => {
+  res.render('join_club', {
+    title: 'Join Club',
+  });
+});
+
+exports.join_club_post = [
+  body('passcode')
+    .isLength({ min: 1 })
+    .withMessage('A passcode is required to join the club!')
+    .matches('i am a member')
+    .withMessage('The secret passcode you provided is not working :\\')
+    .escape(),
+  asyncHandler(async (req, res, next) => {
+    const errors = validationResult(req);
+
+    const user = await User.findById(req.params.id);
+
+    if (errors.isEmpty()) {
+      if (!user) {
+        const err = new Error('User not found');
+        err.status = 404;
+        next(err);
+      }
+      user.membership_status = 'member';
+      await user.save();
+      res.redirect('/');
+    } else {
+      res.render('join_club', {
+        title: 'Join Club',
+        errors: errors.array(),
+      });
+    }
+  }),
+];

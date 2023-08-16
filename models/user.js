@@ -12,4 +12,9 @@ UserSchema.virtual('isAdmin').get(function handler() {
   return this.membership_status === 'admin';
 });
 
+UserSchema.virtual('join_club_url').get(function handler() {
+  // eslint-disable-next-line no-underscore-dangle
+  return `/users/join_club/${this._id}`;
+});
+
 module.exports = model('User', UserSchema);
