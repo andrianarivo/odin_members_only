@@ -9,11 +9,25 @@ const debug = require('debug')('app');
 const expressLayouts = require('express-ejs-layouts');
 const session = require('express-session');
 const passport = require('passport');
+const compression = require('compression');
+const helmet = require('helmet');
+const RateLimit = require('express-rate-limit');
+const MongoStore = require('connect-mongo');
 
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
 
-nconf.file({ file: path.join(__dirname, 'config.json') });
+nconf.argv()
+  .env();
+
+const env = nconf.get('NODE_ENV') || 'development';
+
+if (env === 'production') {
+  nconf.file({ file: path.join(__dirname, 'config.prod.json') });
+} else {
+  nconf.file({ file: path.join(__dirname, 'config.json') });
+}
+
 const mongoDB = nconf.get('mongoDB');
 
 async function main() {
@@ -23,6 +37,26 @@ async function main() {
 main().catch((err) => debug(err));
 
 const app = express();
+
+// Set up rate limiter: maximum of twenty requests per minute
+const limiter = RateLimit({
+  windowMs: 1 * 60 * 1000, // 1 minute
+  max: 20,
+});
+// Apply rate limiter to all requests
+app.use(limiter);
+
+// Add helmet to the middleware chain.
+// Set CSP headers to allow our Bootstrap and Jquery to be served
+app.use(
+  helmet.contentSecurityPolicy({
+    directives: {
+      'script-src': ['\'self\'', 'cdn.jsdelivr.net'],
+    },
+  }),
+);
+
+app.use(compression()); // Compress all routes
 
 // view engine setup
 app.use(expressLayouts);
@@ -36,6 +70,10 @@ app.use(session({
   secret,
   resave: false,
   saveUninitialized: true,
+  store: MongoStore.create({
+    mongoUrl: mongoDB,
+    autoRemove: 'native',
+  }),
 }));
 app.use(passport.initialize());
 app.use(passport.session());
