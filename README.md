@@ -4,7 +4,7 @@
   <img src="members_only.drawio.svg"/>
   <br/>
 
-  <h3><b>Members Only</b></h3>
+<h3><b>Members Only</b></h3>
 
 </div>
 
@@ -13,16 +13,16 @@
 # 📗 Table of Contents
 
 - [📖 About the Project](#about-project)
-  - [🛠 Built With](#built-with)
-    - [Tech Stack](#tech-stack)
-    - [Key Features](#key-features)
-  - [🚀 Live Demo](#live-demo)
+    - [🛠 Built With](#built-with)
+        - [Tech Stack](#tech-stack)
+        - [Key Features](#key-features)
+    - [🚀 Live Demo](#live-demo)
 - [💻 Getting Started](#getting-started)
-  - [Setup](#setup)
-  - [Prerequisites](#prerequisites)
-  - [Install](#install)
-  - [Usage](#usage)
-  - [Deployment](#deployment)
+    - [Setup](#setup)
+    - [Prerequisites](#prerequisites)
+    - [Install](#install)
+    - [Usage](#usage)
+    - [Deployment](#deployment)
 - [👥 Authors](#authors)
 - [🔭 Future Features](#future-features)
 - [🤝 Contributing](#contributing)
@@ -34,7 +34,8 @@
 
 # 📖 Members Only <a name="about-project"></a>
 
-**Members Only** is an exclusive clubhouse where members can write anonymous posts. Inside the clubhouse, members can see who the author of a post is, but outside they can only see the story and wonder who wrote it.
+**Members Only** is an exclusive clubhouse where members can write anonymous posts. Inside the clubhouse, members can
+see who the author of a post is, but outside they can only see the story and wonder who wrote it.
 
 ## 🛠 Built With <a name="built-with"></a>
 
@@ -68,7 +69,7 @@
 
 ## 🚀 Live Demo <a name="live-demo"></a>
 
-- [Live Demo Link](https://google.com)
+- [Live Demo Link](https://david-members-only.fly.dev/)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -84,7 +85,6 @@ In order to run this project you need:
 
 - `NodeJS`
 - `a code Editor (VSCode, Webstorm, etc.)`
-
 
 ### Setup
 
@@ -154,7 +154,7 @@ Feel free to check the [issues page](../../issues/).
 
 ## ⭐️ Show your support <a name="support"></a>
 
-If you like this project consider adding a ⭐️ 
+If you like this project consider adding a ⭐️
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
