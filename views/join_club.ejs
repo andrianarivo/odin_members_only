@@ -1,0 +1,18 @@
+<div class="container-fluid d-flex justify-content-center align-items-center flex-column">
+    <h2 class="ts-1"><%= locals.title %></h2>
+    <% if (locals.errors) { %>
+        <ul class="list-group">
+            <% locals.errors.forEach((error) => { %>
+                <li class="list-group-item list-group-item-warning"><%= error.msg %></li>
+            <% }) %>
+        </ul>
+    <% } %>
+    <form method="post" action="" class="w-50">
+        <div class="mb-3">
+            <label for="passcode" class="form-label">Passcode:</label>
+            <input type="text" name="passcode" class="form-control" id="passcode">
+        </div>
+        <button type="submit" class="btn btn-danger">Submit</button>
+        <a href="/users/sign_in" class="btn btn-success">Do not join</a>
+    </form>
+</div>

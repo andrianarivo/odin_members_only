@@ -1,0 +1,38 @@
+<div class="container-fluid d-flex justify-content-center align-items-center flex-column">
+    <h2 class="fs-1 mb-3"><%= locals.title %></h2>
+    <% if (locals.errors) { %>
+        <p>Fix these errors before continue:</p>
+        <ul class="list-group">
+            <% locals.errors.forEach((error) => { %>
+                <li class="list-group-item list-group-item-warning"><%= error.msg %></li>
+            <% }) %>
+        </ul>
+    <% } %>
+    <form class="w-50" method="post" action="">
+        <div class="mb-3">
+            <label for="first_name" class="form-label">Firstname:</label>
+            <input type="text" name="first_name" class="form-control" id="first_name">
+        </div>
+        <div class="mb-3">
+            <label for="last_name" class="form-label">Lastname:</label>
+            <input type="text" name="last_name" class="form-control" id="last_name">
+        </div>
+        <div class="mb-3">
+            <label for="email" class="form-label">Email:</label>
+            <input type="email" name="email" class="form-control" id="email">
+        </div>
+        <div class="mb-3">
+            <label for="password" class="form-label">Password:</label>
+            <input type="password" name="password" class="form-control" id="password">
+        </div>
+        <div class="mb-3">
+            <label for="confirm_password" class="form-label">Confirm Password:</label>
+            <input type="password" name="confirm_password" class="form-control" id="confirm_password">
+        </div>
+        <div class="mb-3">
+            <input type="checkbox" class="form-check-input" name="is_admin" id="is_admin"/>
+            <label for="is_admin" class="form-label"><strong> is admin </strong></label>
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+</div>

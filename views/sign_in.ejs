@@ -1,0 +1,22 @@
+<div class="container-fluid d-flex justify-content-center align-items-center flex-column">
+    <h2 class="fs-1 mb-3"><%= locals.title %></h2>
+    <% if (locals.errors) { %>
+        <p>Fix these errors before continue:</p>
+        <ul class="list-group">
+            <% locals.errors.forEach((error) => { %>
+                <li class="list-group-item list-group-item-warning"><%= error %></li>
+            <% }) %>
+        </ul>
+    <% } %>
+    <form class="w-50" method="post" action="">
+        <div class="mb-3">
+            <label for="email" class="form-label">Email:</label>
+            <input type="email" name="email" class="form-control" id="email">
+        </div>
+        <div class="mb-3">
+            <label for="password" class="form-label">Password:</label>
+            <input type="password" name="password" class="form-control" id="password">
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+</div>

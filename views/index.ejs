@@ -1,0 +1,35 @@
+<div class="container">
+    <h1>Welcome <%= locals.currentUser ? `back ${locals.currentUser.first_name}` : 'anonymous user!' %></h1>
+    <% if (locals.currentUser) { %>
+        <p>Since you have an account, you can create a message!</p>
+        <a class="btn btn-primary" href="/messages/create">Create</a>
+    <% } %>
+    <div class="d-flex flex-wrap flex-column mt-3">
+        <% locals.message_list.forEach((message) => { %>
+            <div class="card">
+                <div class="card-body">
+                    <div class="card-title d-flex justify-content-between">
+                        <h5 class="fs-4"><%= message.title %></h5>
+                        <% if (locals.currentUser && locals.currentUser.isAdmin) { %>
+                            <form method="post" action="<%= message.delete_url %>">
+                                <button type="submit" class="btn btn-danger">delete</button>
+                            </form>
+                        <% } %>
+                    </div>
+                    <p class="card-text"><%= message.text %></p>
+                    <% if (locals.currentUser) { %>
+                        <div class="card-footer d-flex justify-content-between">
+                            <p>Written by: <%= message.author.first_name %></p>
+                            <div>
+                                <p><%= message.created_at_formatted %></p>
+                                <% if (message.updated_at) { %>
+                                    <p>Updated: <%= message.updated_at_formatted %></p>
+                                <% } %>
+                            </div>
+                        </div>
+                    <% } %>
+                </div>
+            </div>
+        <% }) %>
+    </div>
+</div>
